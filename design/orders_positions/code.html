@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Coders Trading Bot - Orders &amp; Positions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#c2c7cc",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed-variant": "#42474b",
+              "on-secondary-fixed": "#171c20",
+              "on-primary-fixed": "#001946",
+              "on-error-container": "#93000a",
+              "on-surface-variant": "#434653",
+              "surface-tint": "#2259bf",
+              "surface-bright": "#faf9fa",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "primary-fixed-dim": "#b1c5ff",
+              "on-tertiary-fixed": "#211b00",
+              "outline": "#737784",
+              "on-tertiary-fixed-variant": "#524600",
+              "surface-container-high": "#e9e8e9",
+              "surface": "#faf9fa",
+              "primary-container": "#3366cc",
+              "on-primary": "#ffffff",
+              "inverse-on-surface": "#f2f0f1",
+              "primary-fixed": "#d9e2ff",
+              "error": "#ba1a1a",
+              "tertiary-fixed-dim": "#dcc661",
+              "on-tertiary-container": "#4a3f00",
+              "surface-container-low": "#f5f3f4",
+              "secondary-container": "#dfe3e8",
+              "secondary-fixed": "#dfe3e8",
+              "on-primary-container": "#e7ebff",
+              "background": "#faf9fa",
+              "primary": "#094cb2",
+              "surface-container-lowest": "#ffffff",
+              "surface-variant": "#e3e2e3",
+              "surface-dim": "#dbdadb",
+              "on-background": "#1b1c1d",
+              "on-secondary-container": "#606569",
+              "on-primary-fixed-variant": "#00419d",
+              "inverse-surface": "#303031",
+              "secondary": "#5a5f63",
+              "outline-variant": "#c3c6d5",
+              "on-secondary": "#ffffff",
+              "on-surface": "#1b1c1d",
+              "surface-container-highest": "#e3e2e3",
+              "surface-container": "#efedee",
+              "inverse-primary": "#b1c5ff",
+              "tertiary-container": "#bfab49",
+              "tertiary": "#6d5e00",
+              "tertiary-fixed": "#f9e37a"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Inter"],
+              "label": ["Public Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Noto Serif', serif; }
+        .label-style { font-family: 'Public Sans', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-xl docked full-width top-0 sticky z-50">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-700 dark:text-blue-400" data-icon="menu_book">menu_book</span>
+<h1 class="font-serif italic font-bold text-blue-800 dark:text-blue-300 text-2xl tracking-tight">Alexandria</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+<div class="bg-slate-200/50 dark:bg-slate-800/50 h-px w-full"></div>
+</header>
+<main class="px-6 py-8 space-y-10">
+<!-- Page Header -->
+<div class="flex justify-between items-end">
+<div class="space-y-1">
+<p class="label-style text-[11px] uppercase tracking-widest text-tertiary font-bold">Trading Terminal</p>
+<h2 class="text-4xl font-headline font-bold text-on-surface">Live Ledger</h2>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-xl" data-icon="refresh">refresh</span>
+</button>
+</div>
+</div>
+<!-- Dashboard Summary Stats -->
+<div class="grid grid-cols-2 gap-4">
+<div class="p-5 bg-surface-container-lowest rounded-xl shadow-sm space-y-2">
+<p class="label-style text-[10px] uppercase tracking-widest text-on-surface-variant">Unrealized PNL</p>
+<p class="text-2xl font-headline font-bold text-blue-700">+$1,248.40</p>
+</div>
+<div class="p-5 bg-surface-container-lowest rounded-xl shadow-sm space-y-2">
+<p class="label-style text-[10px] uppercase tracking-widest text-on-surface-variant">Available Margin</p>
+<p class="text-2xl font-headline font-bold text-on-surface">$42,910.15</p>
+</div>
+</div>
+<!-- Active Positions Section -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-headline font-bold flex items-center gap-2">
+                    Active Positions
+                    <span class="label-style text-[11px] px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed rounded-full">3</span>
+</h3>
+<button class="label-style text-[11px] uppercase font-bold text-primary flex items-center gap-1">
+                    Manage All <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Position List -->
+<div class="space-y-4">
+<!-- Position Card 1 -->
+<div class="bg-surface-container-low p-5 rounded-2xl space-y-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="US Dollar currency symbol macro" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZViq0RB3qszU_H8fniTG5QZtMAhv2cpYqmM6seAjSTLCgIgDppoUQZRIDKCemAauwI7fRxBJVPc-7pM7bCYlWrPqOkdMOlmzHHp7g0o2MVhskEAixxgkykXS0hPqk8SQyZly-aZJYlyrZ1ucmGVchCLLu_n4LWgaIePbWB3keOoRxoDfVv5vqlsyu6IpB-ltvAqFq54Ois7ih9tDaOyhovNCbw2j4OpLPQ-E2aJunR6jycG91zSz4xWcnNTw6kkQensMlyWB2Qmc"/>
+</div>
+<div>
+<p class="font-bold font-body text-on-surface">BTC / USDT</p>
+<p class="label-style text-[11px] text-on-surface-variant">LONG • 20x LEVERAGE</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-lg font-headline font-bold text-blue-700">+8.42%</p>
+<p class="label-style text-[10px] text-on-surface-variant">ROE</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2 border-t border-outline-variant/20 pt-4">
+<div>
+<p class="label-style text-[10px] text-on-surface-variant uppercase">Size</p>
+<p class="text-sm font-body font-semibold">1.42 BTC</p>
+</div>
+<div>
+<p class="label-style text-[10px] text-on-surface-variant uppercase">Entry</p>
+<p class="text-sm font-body font-semibold">64,210.00</p>
+</div>
+<div>
+<p class="label-style text-[10px] text-on-surface-variant uppercase">Mark</p>
+<p class="text-sm font-body font-semibold">65,942.10</p>
+</div>
+</div>
+</div>
+<!-- Position Card 2 -->
+<div class="bg-surface-container-low p-5 rounded-2xl space-y-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="European Union flag representation for currency trading" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMrjCqcpIbnXEqQD4ylvG3EuEUdbmxVjmvaoITJtKfwwgLKcJ1jvGC_ywSwoiwSfrSeY-1JUOU8WwVx-bxQ5mOdYo9bJyrWmpNy95G6VJUCOc8ZaWjGMyR9Z1xpGt8EYjZQe9x-pRwPfjiZgkQw36z5FHfgDtUMaiomryMD1GZKe-S5zs7BBbtIrwpP4dz5MMyhAlZlo95qEX0DYc6t6m9g-40YXsdmbnvYnDd0VzcSbISrfRAsYetJQdxLitfVsXEb0Bmq0QJj6A"/>
+</div>
+<div>
+<p class="font-bold font-body text-on-surface">ETH / USDT</p>
+<p class="label-style text-[11px] text-on-surface-variant">SHORT • 10x LEVERAGE</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-lg font-headline font-bold text-error">-2.15%</p>
+<p class="label-style text-[10px] text-on-surface-variant">ROE</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2 border-t border-outline-variant/20 pt-4">
+<div>
+<p class="label-style text-[10px] text-on-surface-variant uppercase">Size</p>
+<p class="text-sm font-body font-semibold">24.5 ETH</p>
+</div>
+<div>
+<p class="label-style text-[10px] text-on-surface-variant uppercase">Entry</p>
+<p class="text-sm font-body font-semibold">3,450.20</p>
+</div>
+<div>
+<p class="label-style text-[10px] text-on-surface-variant uppercase">Mark</p>
+<p class="text-sm font-body font-semibold">3,524.45</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Open Orders Section -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-headline font-bold flex items-center gap-2">
+                    Open Orders
+                </h3>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-lg" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+<!-- Orders Table/List -->
+<div class="space-y-px overflow-hidden rounded-2xl">
+<!-- Order Row 1 -->
+<div class="bg-surface-container-lowest p-4 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="label-style text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full w-fit mb-1">LIMIT BUY</span>
+<p class="font-headline font-bold">SOL / USDT</p>
+</div>
+<div class="text-right">
+<p class="font-body font-semibold">$142.50</p>
+<p class="label-style text-[10px] text-on-surface-variant">Price</p>
+</div>
+<div class="text-right">
+<p class="font-body font-semibold">250.0</p>
+<p class="label-style text-[10px] text-on-surface-variant">Amount</p>
+</div>
+<button class="text-error">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Order Row 2 -->
+<div class="bg-surface-container-lowest p-4 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="label-style text-[10px] font-bold text-error bg-error-container/20 px-2 py-0.5 rounded-full w-fit mb-1">LIMIT SELL</span>
+<p class="font-headline font-bold">BTC / USDT</p>
+</div>
+<div class="text-right">
+<p class="font-body font-semibold">$68,000.0</p>
+<p class="label-style text-[10px] text-on-surface-variant">Price</p>
+</div>
+<div class="text-right">
+<p class="font-body font-semibold">0.50</p>
+<p class="label-style text-[10px] text-on-surface-variant">Amount</p>
+</div>
+<button class="text-error">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Order Row 3 -->
+<div class="bg-surface-container-lowest p-4 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="label-style text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full w-fit mb-1">LIMIT BUY</span>
+<p class="font-headline font-bold">LINK / USDT</p>
+</div>
+<div class="text-right">
+<p class="font-body font-semibold">$18.25</p>
+<p class="label-style text-[10px] text-on-surface-variant">Price</p>
+</div>
+<div class="text-right">
+<p class="font-body font-semibold">1,200.0</p>
+<p class="label-style text-[10px] text-on-surface-variant">Amount</p>
+</div>
+<button class="text-error">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Decorative Archival Element -->
+<div class="pt-12 pb-8 border-t border-outline-variant/10 flex flex-col items-center opacity-40">
+<span class="material-symbols-outlined text-4xl mb-4" data-icon="history_edu">history_edu</span>
+<p class="label-style text-[10px] tracking-[0.3em] uppercase text-center">System Authenticated Trading Terminal • V.2.0.4</p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-2xl fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 z-50 rounded-t-2xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.03)] dark:shadow-none">
+<div class="bg-slate-100 dark:bg-slate-800/40 h-px absolute top-0 left-0 w-full"></div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-6 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-blue-700 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl px-6 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium mt-1">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-6 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium mt-1">Settings</span>
+</div>
+</nav>
+</body></html>

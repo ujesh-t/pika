@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>{% block title %}Alexandria | Coders Trading Bot{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "secondary-fixed-dim": "#c2c7cc",
+        "on-tertiary": "#ffffff",
+        "on-secondary-fixed-variant": "#42474b",
+        "on-secondary-fixed": "#171c20",
+        "on-primary-fixed": "#001946",
+        "on-error-container": "#93000a",
+        "on-surface-variant": "#434653",
+        "surface-tint": "#2259bf",
+        "surface-bright": "#faf9fa",
+        "error-container": "#ffdad6",
+        "on-error": "#ffffff",
+        "primary-fixed-dim": "#b1c5ff",
+        "on-tertiary-fixed": "#211b00",
+        "outline": "#737784",
+        "on-tertiary-fixed-variant": "#524600",
+        "surface-container-high": "#e9e8e9",
+        "surface": "#faf9fa",
+        "primary-container": "#3366cc",
+        "on-primary": "#ffffff",
+        "inverse-on-surface": "#f2f0f1",
+        "primary-fixed": "#d9e2ff",
+        "error": "#ba1a1a",
+        "tertiary-fixed-dim": "#dcc661",
+        "on-tertiary-container": "#4a3f00",
+        "surface-container-low": "#f5f3f4",
+        "secondary-container": "#dfe3e8",
+        "secondary-fixed": "#dfe3e8",
+        "on-primary-container": "#e7ebff",
+        "background": "#faf9fa",
+        "primary": "#094cb2",
+        "surface-container-lowest": "#ffffff",
+        "surface-variant": "#e3e2e3",
+        "surface-dim": "#dbdadb",
+        "on-background": "#1b1c1d",
+        "on-secondary-container": "#606569",
+        "on-primary-fixed-variant": "#00419d",
+        "inverse-surface": "#303031",
+        "secondary": "#5a5f63",
+        "outline-variant": "#c3c6d5",
+        "on-secondary": "#ffffff",
+        "on-surface": "#1b1c1d",
+        "surface-container-highest": "#e3e2e3",
+        "surface-container": "#efedee",
+        "inverse-primary": "#b1c5ff",
+        "tertiary-container": "#bfab49",
+        "tertiary": "#6d5e00",
+        "tertiary-fixed": "#f9e37a"
+      },
+      fontFamily: {
+        "headline": ["Noto Serif", "serif"],
+        "body": ["Inter", "sans-serif"],
+        "label": ["Public Sans", "sans-serif"]
+      },
+      borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #faf9fa;
+}
+.serif-text { font-family: 'Noto Serif', serif; }
+.label-text { font-family: 'Public Sans', sans-serif; }
+body { min-height: max(884px, 100dvh); }
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<header class="bg-slate-50/80 backdrop-blur-xl docked full-width top-0 sticky z-50">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-700">menu_book</span>
+<h1 class="font-serif italic font-bold text-blue-800 text-2xl tracking-tight">Alexandria</h1>
+</div>
+<div class="flex items-center gap-4">
+{% if current_user.is_authenticated %}
+<a href="/logout" class="material-symbols-outlined text-slate-500 hover:text-blue-600 transition-colors">logout</a>
+{% else %}
+<span class="material-symbols-outlined text-slate-500">account_circle</span>
+{% endif %}
+</div>
+</div>
+<div class="bg-slate-200/50 h-px w-full"></div>
+</header>
+
+{% block content %}{% endblock %}
+
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-slate-50/90 backdrop-blur-2xl z-50 rounded-t-2xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.03)]">
+<a href="/" class="flex flex-col items-center justify-center {% if request.path == '/' %}text-blue-700 bg-blue-50/50 rounded-xl{% else %}text-slate-400{% endif %} px-6 py-1 active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1" data-icon="dashboard" {% if request.path == '/' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>dashboard</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Home</span>
+</a>
+<a href="/orders-positions" class="flex flex-col items-center justify-center {% if request.path == '/orders-positions' %}text-blue-700 bg-blue-50/50 rounded-xl{% else %}text-slate-400{% endif %} px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1" data-icon="receipt_long" {% if request.path == '/orders-positions' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>receipt_long</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Orders</span>
+</a>
+<a href="/generate-token" class="flex flex-col items-center justify-center {% if request.path == '/generate-token' %}text-blue-700 bg-blue-50/50 rounded-xl{% else %}text-slate-400{% endif %} px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1" data-icon="settings" {% if request.path == '/generate-token' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>settings</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Settings</span>
+</a>
+</nav>
+
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

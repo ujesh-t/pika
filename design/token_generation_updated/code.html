@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Inter:wght@300;400;500;600&amp;family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#c2c7cc",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed-variant": "#42474b",
+              "on-secondary-fixed": "#171c20",
+              "on-primary-fixed": "#001946",
+              "on-error-container": "#93000a",
+              "on-surface-variant": "#434653",
+              "surface-tint": "#2259bf",
+              "surface-bright": "#faf9fa",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "primary-fixed-dim": "#b1c5ff",
+              "on-tertiary-fixed": "#211b00",
+              "outline": "#737784",
+              "on-tertiary-fixed-variant": "#524600",
+              "surface-container-high": "#e9e8e9",
+              "surface": "#faf9fa",
+              "primary-container": "#3366cc",
+              "on-primary": "#ffffff",
+              "inverse-on-surface": "#f2f0f1",
+              "primary-fixed": "#d9e2ff",
+              "error": "#ba1a1a",
+              "tertiary-fixed-dim": "#dcc661",
+              "on-tertiary-container": "#4a3f00",
+              "surface-container-low": "#f5f3f4",
+              "secondary-container": "#dfe3e8",
+              "secondary-fixed": "#dfe3e8",
+              "on-primary-container": "#e7ebff",
+              "background": "#faf9fa",
+              "primary": "#094cb2",
+              "surface-container-lowest": "#ffffff",
+              "surface-variant": "#e3e2e3",
+              "surface-dim": "#dbdadb",
+              "on-background": "#1b1c1d",
+              "on-secondary-container": "#606569",
+              "on-primary-fixed-variant": "#00419d",
+              "inverse-surface": "#303031",
+              "secondary": "#5a5f63",
+              "outline-variant": "#c3c6d5",
+              "on-secondary": "#ffffff",
+              "on-surface": "#1b1c1d",
+              "surface-container-highest": "#e3e2e3",
+              "surface-container": "#efedee",
+              "inverse-primary": "#b1c5ff",
+              "tertiary-container": "#bfab49",
+              "tertiary": "#6d5e00",
+              "tertiary-fixed": "#f9e37a"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Inter"],
+              "label": ["Public Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-effect {
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background font-body text-on-surface">
+<!-- Top Navigation -->
+<header class="bg-slate-50/80 backdrop-blur-xl docked full-width top-0 sticky z-50">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-700">menu_book</span>
+<h1 class="font-serif italic font-bold text-blue-800 text-2xl tracking-tight">Alexandria</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-500">account_circle</span>
+</div>
+</div>
+<div class="bg-slate-200/50 h-px w-full"></div>
+</header>
+<main class="max-w-md mx-auto px-6 pt-8 pb-32">
+<!-- Brand/App Header Section -->
+<section class="mb-10 text-center">
+<div class="inline-block p-4 bg-surface-container-low rounded-full mb-4">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<h2 class="font-headline text-3xl font-bold text-on-surface mb-2 tracking-tight">Coders Trading Bot</h2>
+<p class="font-label text-sm text-on-surface-variant uppercase tracking-widest">Authentication Hub</p>
+</section>
+<!-- Token Status Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 mb-8 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline text-lg font-bold">Fyers Token Status</h3>
+<span class="inline-flex items-center px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-xs font-bold rounded-full font-label tracking-tighter">
+                    EXPIRED
+                </span>
+</div>
+<div class="flex items-center gap-4 bg-surface-container p-4 rounded-lg">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-error-container">warning</span>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface">Session Inactive</p>
+<p class="text-xs text-on-surface-variant">Last updated: 14 hours ago</p>
+</div>
+</div>
+</div><div class="space-y-4 mb-10">
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-5 rounded-xl font-headline font-bold text-lg shadow-lg active:scale-95 duration-200 transition-all">
+                Generate Access Token
+            </button>
+<p class="text-center font-label text-[10px] text-on-surface-variant uppercase tracking-widest px-4">
+                Secure 256-bit encrypted handshake protocol
+            </p>
+</div>
+<!-- Instructional Guide (Asymmetric Bento) -->
+<section class="mb-10">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline text-xl font-bold text-on-surface">Generation Guide</h3>
+<span class="font-label text-xs text-primary font-semibold border-b border-primary pb-0.5 uppercase tracking-wider">Step-by-Step</span>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<!-- Step 1 -->
+<div class="bg-surface-container-low p-5 rounded-xl flex gap-4">
+<div class="text-primary font-serif italic text-2xl opacity-40">01</div>
+<div>
+<h4 class="font-headline font-bold mb-1">Fyers API Dashboard</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Login to your dashboard and verify your API credentials (App ID &amp; Secret Key).</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Step 2 -->
+<div class="bg-surface-container-high p-5 rounded-xl">
+<div class="text-primary font-serif italic text-2xl opacity-40 mb-2">02</div>
+<h4 class="font-headline font-bold text-sm mb-1">Redirect URI</h4>
+<p class="text-xs text-on-surface-variant">Ensure your redirect URL matches the bot endpoint.</p>
+</div>
+<!-- Step 3 -->
+<div class="bg-surface-dim p-5 rounded-xl">
+<div class="text-primary font-serif italic text-2xl opacity-40 mb-2">03</div>
+<h4 class="font-headline font-bold text-sm mb-1">Auth Code</h4>
+<p class="text-xs text-on-surface-variant">Grant permissions to initiate the handshake.</p>
+</div>
+</div>
+<!-- Final Action Step Visual -->
+<div class="relative overflow-hidden rounded-xl h-40 group">
+<img alt="Financial charts" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Close-up of a high-tech financial trading screen with neon glowing candlestick charts and abstract data points in a dark setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDShOrHecw9at5Vbh0veTG6EQKV9x4FW0DVCNEN7dAejxIz5Evb1wFqNqx7Dt3DhtSxzEnvUbT03WwKNUixmTpSpCCQHmLTZbm7kUtmaIoIY8CN-F3KqtuOlNGHmvXk4lbjbO2B5kHkGF-0J1nmPpRVV7r2s21eqlYJJ__BLtEh6ruKW4D-XjiJ9bMmeVJFJ0z3QOlg6P3W5Rbrp2S32wjSWLwyt4ycS1HF3nPafZAynRbn-A3JpdeNUwuViXDVUcDMMF8sFSu_x9M"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent flex items-end p-6">
+<p class="text-white font-serif italic text-lg leading-snug">The final bridge to automated algorithmic execution.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-slate-50/90 backdrop-blur-2xl z-50 rounded-t-2xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.03)]">
+<div class="bg-slate-100 h-px absolute top-0 left-0 w-full"></div>
+<div class="flex flex-col items-center justify-center text-slate-400 px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-blue-700 bg-blue-50/50 rounded-xl px-6 py-1 active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Settings</span>
+</div>
+</nav>
+</body></html>

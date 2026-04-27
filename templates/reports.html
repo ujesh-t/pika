@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alexandria | P&L Reports</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "secondary-fixed-dim": "#c2c7cc", "on-tertiary": "#ffffff", "on-secondary-fixed-variant": "#42474b",
+        "on-secondary-fixed": "#171c20", "on-primary-fixed": "#001946", "on-error-container": "#93000a",
+        "on-surface-variant": "#434653", "surface-tint": "#2259bf", "surface-bright": "#faf9fa",
+        "error-container": "#ffdad6", "on-error": "#ffffff", "primary-fixed-dim": "#b1c5ff",
+        "on-tertiary-fixed": "#211b00", "outline": "#737784", "on-tertiary-fixed-variant": "#524600",
+        "surface-container-high": "#e9e8e9", "surface": "#faf9fa", "primary-container": "#3366cc",
+        "on-primary": "#ffffff", "inverse-on-surface": "#f2f0f1", "primary-fixed": "#d9e2ff",
+        "error": "#ba1a1a", "tertiary-fixed-dim": "#dcc661", "on-tertiary-container": "#4a3f00",
+        "surface-container-low": "#f5f3f4", "secondary-container": "#dfe3e8", "secondary-fixed": "#dfe3e8",
+        "on-primary-container": "#e7ebff", "background": "#faf9fa", "primary": "#094cb2",
+        "surface-container-lowest": "#ffffff", "surface-variant": "#e3e2e3", "surface-dim": "#dbdadb",
+        "on-background": "#1b1c1d", "on-secondary-container": "#606569", "on-primary-fixed-variant": "#00419d",
+        "inverse-surface": "#303031", "secondary": "#5a5f63", "outline-variant": "#c3c6d5",
+        "on-secondary": "#ffffff", "on-surface": "#1b1c1d", "surface-container-highest": "#e3e2e3",
+        "surface-container": "#efedee", "inverse-primary": "#b1c5ff", "tertiary-container": "#bfab49",
+        "tertiary": "#6d5e00", "tertiary-fixed": "#f9e37a"
+      },
+      fontFamily: { "headline": ["Noto Serif"], "body": ["Inter"], "label": ["Public Sans"] },
+      borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+body { font-family: 'Inter', sans-serif; background-color: #faf9fa; min-height: max(884px, 100dvh); }
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<header class="bg-slate-50/80 backdrop-blur-xl docked full-width top-0 sticky z-50">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-700">menu_book</span>
+<h1 class="font-serif italic font-bold text-blue-800 text-2xl tracking-tight">Alexandria</h1>
+</div>
+<div class="flex items-center gap-4">
+<a href="/logout" class="material-symbols-outlined text-slate-500 hover:text-blue-600 transition-colors">logout</a>
+</div>
+</div>
+<div class="bg-slate-200/50 h-px w-full"></div>
+</header>
+
+<main class="px-6 py-8 max-w-lg mx-auto space-y-8">
+<div class="space-y-1">
+<p class="label-text text-[11px] uppercase tracking-widest text-tertiary font-bold">Analytics</p>
+<h2 class="text-4xl font-headline font-bold text-on-surface">P&amp;L Reports</h2>
+</div>
+
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm">
+<p class="label-text text-[10px] uppercase tracking-widest text-on-surface-variant">Today</p>
+<p id="daily-pnl" class="text-3xl font-headline font-bold mt-2">---</p>
+<p id="daily-stats" class="label-text text-xs text-on-surface-variant mt-1">---</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm">
+<p class="label-text text-[10px] uppercase tracking-widest text-on-surface-variant">This Week</p>
+<p id="weekly-pnl" class="text-3xl font-headline font-bold mt-2">---</p>
+<p id="weekly-stats" class="label-text text-xs text-on-surface-variant mt-1">---</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm">
+<p class="label-text text-[10px] uppercase tracking-widest text-on-surface-variant">This Month</p>
+<p id="monthly-pnl" class="text-3xl font-headline font-bold mt-2">---</p>
+<p id="monthly-stats" class="label-text text-xs text-on-surface-variant mt-1">---</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm border-l-4 border-primary">
+<p class="label-text text-[10px] uppercase tracking-widest text-on-surface-variant">All Time</p>
+<p id="total-pnl" class="text-3xl font-headline font-bold mt-2">---</p>
+<p id="total-stats" class="label-text text-xs text-on-surface-variant mt-1">---</p>
+</div>
+</div>
+</main>
+
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-slate-50/90 backdrop-blur-2xl z-50 rounded-t-2xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.03)]">
+<a href="/" class="flex flex-col items-center justify-center text-slate-400 px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Home</span>
+</a>
+<a href="/orders-positions" class="flex flex-col items-center justify-center text-slate-400 px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Orders</span>
+</a>
+<a href="/generate-token" class="flex flex-col items-center justify-center text-slate-400 px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Settings</span>
+</a>
+</nav>
+
+<script>
+async function f(u) { try { const r = await fetch(u); return await r.json(); } catch { return null; } }
+
+function fmt(amount) {
+    if (amount === null || amount === undefined) return '---';
+    const prefix = amount >= 0 ? '+' : '';
+    return prefix + '\u20B9' + Number(amount).toLocaleString('en-IN', {minimumFractionDigits: 2});
+}
+
+async function load() {
+    const daily = await f('/api/pnl/daily');
+    if (daily) {
+        document.getElementById('daily-pnl').textContent = fmt(daily.pnl);
+        document.getElementById('daily-pnl').className = `text-3xl font-headline font-bold mt-2 ${daily.pnl >= 0 ? 'text-green-600' : 'text-error'}`;
+        document.getElementById('daily-stats').textContent = `${daily.total} trades, ${daily.wins} wins`;
+    }
+
+    const weekly = await f('/api/pnl/weekly');
+    if (weekly) {
+        document.getElementById('weekly-pnl').textContent = fmt(weekly.pnl);
+        document.getElementById('weekly-pnl').className = `text-3xl font-headline font-bold mt-2 ${weekly.pnl >= 0 ? 'text-green-600' : 'text-error'}`;
+        document.getElementById('weekly-stats').textContent = `${weekly.total} trades`;
+    }
+
+    const monthly = await f('/api/pnl/monthly');
+    if (monthly) {
+        document.getElementById('monthly-pnl').textContent = fmt(monthly.pnl);
+        document.getElementById('monthly-pnl').className = `text-3xl font-headline font-bold mt-2 ${monthly.pnl >= 0 ? 'text-green-600' : 'text-error'}`;
+        document.getElementById('monthly-stats').textContent = `${monthly.total} trades`;
+    }
+
+    const total = await f('/api/pnl/total');
+    if (total) {
+        document.getElementById('total-pnl').textContent = fmt(total.pnl);
+        document.getElementById('total-pnl').className = `text-3xl font-headline font-bold mt-2 ${total.pnl >= 0 ? 'text-green-600' : 'text-error'}`;
+        document.getElementById('total-stats').textContent = `${total.total} trades, ${total.wins} wins, ${total.losses} losses, ${total.win_rate}% win rate`;
+    }
+}
+
+load();
+</script>
+</body>
+</html>

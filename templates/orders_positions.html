@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Coders Trading Bot - Orders & Positions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "secondary-fixed-dim": "#c2c7cc", "on-tertiary": "#ffffff", "on-secondary-fixed-variant": "#42474b",
+        "on-secondary-fixed": "#171c20", "on-primary-fixed": "#001946", "on-error-container": "#93000a",
+        "on-surface-variant": "#434653", "surface-tint": "#2259bf", "surface-bright": "#faf9fa",
+        "error-container": "#ffdad6", "on-error": "#ffffff", "primary-fixed-dim": "#b1c5ff",
+        "on-tertiary-fixed": "#211b00", "outline": "#737784", "on-tertiary-fixed-variant": "#524600",
+        "surface-container-high": "#e9e8e9", "surface": "#faf9fa", "primary-container": "#3366cc",
+        "on-primary": "#ffffff", "inverse-on-surface": "#f2f0f1", "primary-fixed": "#d9e2ff",
+        "error": "#ba1a1a", "tertiary-fixed-dim": "#dcc661", "on-tertiary-container": "#4a3f00",
+        "surface-container-low": "#f5f3f4", "secondary-container": "#dfe3e8", "secondary-fixed": "#dfe3e8",
+        "on-primary-container": "#e7ebff", "background": "#faf9fa", "primary": "#094cb2",
+        "surface-container-lowest": "#ffffff", "surface-variant": "#e3e2e3", "surface-dim": "#dbdadb",
+        "on-background": "#1b1c1d", "on-secondary-container": "#606569", "on-primary-fixed-variant": "#00419d",
+        "inverse-surface": "#303031", "secondary": "#5a5f63", "outline-variant": "#c3c6d5",
+        "on-secondary": "#ffffff", "on-surface": "#1b1c1d", "surface-container-highest": "#e3e2e3",
+        "surface-container": "#efedee", "inverse-primary": "#b1c5ff", "tertiary-container": "#bfab49",
+        "tertiary": "#6d5e00", "tertiary-fixed": "#f9e37a"
+      },
+      fontFamily: { "headline": ["Noto Serif"], "body": ["Inter"], "label": ["Public Sans"] },
+      borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+body { font-family: 'Inter', sans-serif; background-color: #faf9fa; min-height: max(884px, 100dvh); }
+h1, h2, h3 { font-family: 'Noto Serif', serif; }
+.label-style { font-family: 'Public Sans', sans-serif; }
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<header class="bg-slate-50/80 backdrop-blur-xl docked full-width top-0 sticky z-50">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-700">menu_book</span>
+<h1 class="font-serif italic font-bold text-blue-800 text-2xl tracking-tight">Alexandria</h1>
+</div>
+<div class="flex items-center gap-4">
+<a href="/logout" class="material-symbols-outlined text-slate-500 hover:text-blue-600 transition-colors">logout</a>
+</div>
+</div>
+<div class="bg-slate-200/50 h-px w-full"></div>
+</header>
+
+<main class="px-6 py-8 space-y-10">
+<div class="flex justify-between items-end">
+<div class="space-y-1">
+<p class="label-style text-[11px] uppercase tracking-widest text-tertiary font-bold">Trading Terminal</p>
+<h2 class="text-4xl font-headline font-bold text-on-surface">Live Ledger</h2>
+</div>
+<div class="flex gap-2">
+<button id="btn-refresh" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-xl">refresh</span>
+</button>
+</div>
+</div>
+
+<div class="grid grid-cols-2 gap-4">
+<div class="p-5 bg-surface-container-lowest rounded-xl shadow-sm space-y-2">
+<p class="label-style text-[10px] uppercase tracking-widest text-on-surface-variant">Fyers P&L</p>
+<p id="fyers-pnl" class="text-2xl font-headline font-bold text-blue-700">---</p>
+</div>
+<div class="p-5 bg-surface-container-lowest rounded-xl shadow-sm space-y-2">
+<p class="label-style text-[10px] uppercase tracking-widest text-on-surface-variant">DB Trade P&L</p>
+<p id="db-pnl" class="text-2xl font-headline font-bold text-on-surface">---</p>
+</div>
+</div>
+
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-headline font-bold flex items-center gap-2">
+Active Positions
+<span id="positions-count" class="label-style text-[11px] px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed rounded-full">0</span>
+</h3>
+</div>
+<div id="positions-list" class="space-y-4">
+<div class="py-8 text-center text-on-surface-variant label-style text-sm">No active positions</div>
+</div>
+</section>
+
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-headline font-bold">Open Orders</h3>
+</div>
+<div id="orders-list" class="space-y-px overflow-hidden rounded-2xl">
+<div class="py-8 text-center text-on-surface-variant label-style text-sm">No open orders</div>
+</div>
+</section>
+
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-headline font-bold">Trade History</h3>
+</div>
+<div id="trade-history" class="space-y-px overflow-hidden rounded-2xl">
+<div class="py-8 text-center text-on-surface-variant label-style text-sm">No trades yet</div>
+</div>
+</section>
+
+<div class="pt-12 pb-8 border-t border-outline-variant/10 flex flex-col items-center opacity-40">
+<span class="material-symbols-outlined text-4xl mb-4">history_edu</span>
+<p class="label-style text-[10px] tracking-[0.3em] uppercase text-center">System Authenticated Trading Terminal</p>
+</div>
+</main>
+
+<nav class="bg-slate-50/90 backdrop-blur-2xl fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 z-50 rounded-t-2xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.03)]">
+<a href="/" class="flex flex-col items-center justify-center text-slate-400 px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium mt-1">Home</span>
+</a>
+<a href="/orders-positions" class="flex flex-col items-center justify-center text-blue-700 bg-blue-50/50 rounded-xl px-6 py-1 active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium mt-1">Orders</span>
+</a>
+<a href="/generate-token" class="flex flex-col items-center justify-center text-slate-400 px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium mt-1">Settings</span>
+</a>
+</nav>
+
+<script>
+async function fetchJSON(url) {
+    try { const r = await fetch(url); return await r.json(); }
+    catch { return null; }
+}
+
+function loadData() {
+    fetchJSON('/api/positions').then(data => {
+        const container = document.getElementById('positions-list');
+        const count = document.getElementById('positions-count');
+        if (data && data.length > 0) {
+            count.textContent = data.length;
+            container.innerHTML = data.map(p => `
+                <div class="bg-surface-container-low p-5 rounded-2xl space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="font-bold font-body text-on-surface">${p.symbol || p.symbol_name || 'N/A'}</p>
+                            <p class="label-style text-[11px] text-on-surface-variant">${p.side || p.buySell || 'N/A'}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-lg font-headline font-bold ${(p.pnl || 0) >= 0 ? 'text-blue-700' : 'text-error'}">
+                                ${p.pnl ? (p.pnl >= 0 ? '+' : '') + '\u20B9' + Number(p.pnl).toLocaleString('en-IN', {minimumFractionDigits: 2}) : '---'}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 border-t border-outline-variant/20 pt-4">
+                        <div><p class="label-style text-[10px] text-on-surface-variant uppercase">Qty</p><p class="text-sm font-body font-semibold">${p.quantity || p.remainingQuantity || 0}</p></div>
+                        <div><p class="label-style text-[10px] text-on-surface-variant uppercase">Entry</p><p class="text-sm font-body font-semibold">${p.entryPrice || '---'}</p></div>
+                        <div><p class="label-style text-[10px] text-on-surface-variant uppercase">LTP</p><p class="text-sm font-body font-semibold">${p.ltp || '---'}</p></div>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            count.textContent = '0';
+            container.innerHTML = '<div class="py-8 text-center text-on-surface-variant label-style text-sm">No active positions</div>';
+        }
+    });
+
+    fetchJSON('/api/open-orders').then(data => {
+        const container = document.getElementById('orders-list');
+        if (data && data.length > 0) {
+            container.innerHTML = data.map(o => {
+                const isBuy = (o.side || '').toUpperCase() === 'BUY' || (o.side || '').toUpperCase() === 'B';
+                return `
+                    <div class="bg-surface-container-lowest p-4 flex items-center justify-between rounded-xl mb-2">
+                        <div class="flex flex-col">
+                            <span class="label-style text-[10px] font-bold ${isBuy ? 'text-blue-700 bg-blue-50' : 'text-error bg-error-container/20'} px-2 py-0.5 rounded-full w-fit mb-1">
+                                ${isBuy ? 'BUY' : 'SELL'}
+                            </span>
+                            <p class="font-headline font-bold">${o.symbol || o.symbol_name || 'N/A'}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-body font-semibold">${o.price || o.limitPrice || '---'}</p>
+                            <p class="label-style text-[10px] text-on-surface-variant uppercase">Price</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-body font-semibold">${o.quantity || 0}</p>
+                            <p class="label-style text-[10px] text-on-surface-variant uppercase">Qty</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            container.innerHTML = '<div class="py-8 text-center text-on-surface-variant label-style text-sm">No open orders</div>';
+        }
+    });
+
+    fetchJSON('/api/trades').then(data => {
+        const container = document.getElementById('trade-history');
+        if (data && data.length > 0) {
+            container.innerHTML = data.map(t => `
+                <div class="bg-surface-container-lowest p-4 flex items-center justify-between rounded-xl mb-2">
+                    <div class="flex flex-col">
+                        <p class="font-headline font-bold">${t.symbol}</p>
+                        <p class="label-style text-[10px] text-on-surface-variant">${t.side} | ${t.status}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-body font-semibold ${(t.pnl || 0) >= 0 ? 'text-blue-700' : 'text-error'}">
+                            ${t.pnl !== null && t.pnl !== undefined ? (t.pnl >= 0 ? '+' : '') + '\u20B9' + Number(t.pnl).toLocaleString('en-IN', {minimumFractionDigits: 2}) : '---'}
+                        </p>
+                        <p class="label-style text-[10px] text-on-surface-variant">${t.exit_reason || t.status}</p>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            container.innerHTML = '<div class="py-8 text-center text-on-surface-variant label-style text-sm">No trades yet</div>';
+        }
+    });
+
+    fetchJSON('/api/pnl/total').then(data => {
+        if (data) {
+            const el = document.getElementById('db-pnl');
+            el.textContent = data.pnl >= 0 ? '+\u20B9' + Number(data.pnl).toLocaleString('en-IN', {minimumFractionDigits: 2}) : '-\u20B9' + Math.abs(data.pnl).toLocaleString('en-IN', {minimumFractionDigits: 2});
+            el.className = `text-2xl font-headline font-bold ${data.pnl >= 0 ? 'text-green-600' : 'text-error'}`;
+        }
+    });
+}
+
+document.getElementById('btn-refresh').addEventListener('click', loadData);
+loadData();
+setInterval(loadData, 10000);
+</script>
+</body>
+</html>

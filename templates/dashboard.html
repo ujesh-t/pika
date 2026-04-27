@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alexandria | Coders Trading Bot</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "secondary-fixed-dim": "#c2c7cc", "on-tertiary": "#ffffff", "on-secondary-fixed-variant": "#42474b",
+        "on-secondary-fixed": "#171c20", "on-primary-fixed": "#001946", "on-error-container": "#93000a",
+        "on-surface-variant": "#434653", "surface-tint": "#2259bf", "surface-bright": "#faf9fa",
+        "error-container": "#ffdad6", "on-error": "#ffffff", "primary-fixed-dim": "#b1c5ff",
+        "on-tertiary-fixed": "#211b00", "outline": "#737784", "on-tertiary-fixed-variant": "#524600",
+        "surface-container-high": "#e9e8e9", "surface": "#faf9fa", "primary-container": "#3366cc",
+        "on-primary": "#ffffff", "inverse-on-surface": "#f2f0f1", "primary-fixed": "#d9e2ff",
+        "error": "#ba1a1a", "tertiary-fixed-dim": "#dcc661", "on-tertiary-container": "#4a3f00",
+        "surface-container-low": "#f5f3f4", "secondary-container": "#dfe3e8", "secondary-fixed": "#dfe3e8",
+        "on-primary-container": "#e7ebff", "background": "#faf9fa", "primary": "#094cb2",
+        "surface-container-lowest": "#ffffff", "surface-variant": "#e3e2e3", "surface-dim": "#dbdadb",
+        "on-background": "#1b1c1d", "on-secondary-container": "#606569", "on-primary-fixed-variant": "#00419d",
+        "inverse-surface": "#303031", "secondary": "#5a5f63", "outline-variant": "#c3c6d5",
+        "on-secondary": "#ffffff", "on-surface": "#1b1c1d", "surface-container-highest": "#e3e2e3",
+        "surface-container": "#efedee", "inverse-primary": "#b1c5ff", "tertiary-container": "#bfab49",
+        "tertiary": "#6d5e00", "tertiary-fixed": "#f9e37a"
+      },
+      fontFamily: { "headline": ["Noto Serif", "serif"], "body": ["Inter", "sans-serif"], "label": ["Public Sans", "sans-serif"] },
+      borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+body { font-family: 'Inter', sans-serif; background-color: #faf9fa; min-height: max(884px, 100dvh); }
+.serif-text { font-family: 'Noto Serif', serif; }
+.label-text { font-family: 'Public Sans', sans-serif; }
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<header class="bg-slate-50/80 backdrop-blur-xl docked full-width top-0 sticky z-50">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-700">menu_book</span>
+<h1 class="font-serif italic font-bold text-blue-800 text-2xl tracking-tight">Alexandria</h1>
+</div>
+<div class="flex items-center gap-4">
+<a href="/logout" class="material-symbols-outlined text-slate-500 hover:text-blue-600 transition-colors">logout</a>
+</div>
+</div>
+<div class="bg-slate-200/50 h-px w-full"></div>
+</header>
+
+<main class="px-6 pt-8 max-w-lg mx-auto space-y-8">
+
+<div id="flash-messages"></div>
+
+<section class="space-y-4">
+<div class="label-text text-[11px] uppercase tracking-[0.2em] text-tertiary font-bold">System Status</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.02)] border-t-4 border-primary">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1 border-r border-surface-variant/30 pr-4">
+<p class="label-text text-on-surface-variant text-[10px] uppercase tracking-wider">Fyers Token</p>
+<div class="flex items-center gap-2">
+<span id="token-status-dot" class="w-2 h-2 rounded-full bg-red-500"></span>
+<span id="token-status-text" class="serif-text font-bold text-base text-on-surface">Inactive</span>
+</div>
+</div>
+<div class="space-y-1 pl-2">
+<p class="label-text text-on-surface-variant text-[10px] uppercase tracking-wider">Bot Instance</p>
+<div class="flex items-center gap-2">
+<span id="bot-status-badge" class="bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded-full label-text font-bold">STOPPED</span>
+</div>
+</div>
+</div>
+<div class="mt-6 flex items-center gap-3">
+<button id="btn-start-bot" class="flex-1 bg-primary text-on-primary py-2.5 rounded-lg label-text text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-sm">play_arrow</span> Start Bot
+</button>
+<button id="btn-stop-bot" class="flex-1 bg-surface-container-high text-on-surface-variant py-2.5 rounded-lg label-text text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-error-container hover:text-on-error-container active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-sm">pause</span> Stop Bot
+</button>
+</div>
+</div>
+</section>
+
+<section class="space-y-4">
+<div class="label-text text-[11px] uppercase tracking-[0.2em] text-tertiary font-bold">Account Overview</div>
+<div class="bg-surface-container-lowest p-8 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.02)] border-l-4 border-primary">
+<div class="space-y-1">
+<p class="label-text text-on-surface-variant text-sm font-medium">Total Collateral</p>
+<div class="serif-text text-4xl font-bold tracking-tight text-on-surface" id="total-collateral">---</div>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<div>
+<p class="label-text text-on-surface-variant text-[10px] uppercase tracking-wider">Available Balance</p>
+<p class="serif-text text-lg font-semibold text-primary" id="available-balance">---</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-5 rounded-xl flex flex-col justify-between h-32 hover:bg-surface-container transition-all">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary">smart_toy</span>
+<span id="session-badge" class="bg-red-100 text-red-700 text-[10px] px-2 py-1 rounded-full label-text font-bold">STOPPED</span>
+</div>
+<div>
+<p class="label-text text-[10px] uppercase tracking-widest text-on-surface-variant">Session</p>
+<p class="serif-text text-lg font-bold" id="session-status">Stopped</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 rounded-xl flex flex-col justify-between h-32 hover:bg-surface-container transition-all">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-tertiary">trending_up</span>
+<span class="text-tertiary text-[10px] px-2 py-1 label-text font-bold" id="daily-pnl-pct">--</span>
+</div>
+<div>
+<p class="label-text text-[10px] uppercase tracking-widest text-on-surface-variant">Daily P&amp;L</p>
+<p class="serif-text text-lg font-bold" id="daily-pnl">---</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 rounded-xl flex flex-col justify-between h-32 hover:bg-surface-container transition-all">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-on-surface-variant">insights</span>
+</div>
+<div>
+<p class="label-text text-[10px] uppercase tracking-widest text-on-surface-variant">Win Rate</p>
+<p class="serif-text text-lg font-bold" id="win-rate">--</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 rounded-xl flex flex-col justify-between h-32 hover:bg-surface-container transition-all">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-on-surface-variant">history</span>
+</div>
+<div>
+<p class="label-text text-[10px] uppercase tracking-widest text-on-surface-variant">Total Trades</p>
+<p class="serif-text text-lg font-bold" id="total-trades">--</p>
+</div>
+</div>
+</section>
+
+<section class="space-y-6">
+<div class="flex justify-between items-end">
+<div class="label-text text-[11px] uppercase tracking-[0.2em] text-tertiary font-bold">Pending Signals</div>
+</div>
+<div id="pending-signals" class="space-y-0">
+<div class="py-8 text-center text-on-surface-variant label-text text-sm">No pending signals</div>
+</div>
+</section>
+
+<section class="pb-12 space-y-4">
+<div class="label-text text-[11px] uppercase tracking-[0.2em] text-tertiary font-bold">Trade Logs</div>
+<div class="bg-surface-container-lowest rounded-2xl border border-surface-variant/30 overflow-hidden">
+<div id="trade-logs" class="max-h-80 overflow-y-auto divide-y divide-surface-variant/20 px-4">
+<div class="py-8 text-center text-on-surface-variant label-text text-sm">No logs yet</div>
+</div>
+</div>
+</section>
+</main>
+
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-slate-50/90 backdrop-blur-2xl z-50 rounded-t-2xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.03)]">
+<a href="/" class="flex flex-col items-center justify-center text-blue-700 bg-blue-50/50 rounded-xl px-6 py-1 active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Home</span>
+</a>
+<a href="/orders-positions" class="flex flex-col items-center justify-center text-slate-400 px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Orders</span>
+</a>
+<a href="/generate-token" class="flex flex-col items-center justify-center text-slate-400 px-6 py-1 hover:bg-slate-100 transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-medium">Settings</span>
+</a>
+</nav>
+
+<div class="fixed bottom-24 right-6 z-40">
+<button id="fab-refresh" class="bg-primary text-on-primary w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined">refresh</span>
+</button>
+</div>
+
+<script>
+async function fetchJSON(url) {
+    try {
+        const resp = await fetch(url);
+        return await resp.json();
+    } catch { return null; }
+}
+
+function updateStatus() {
+    fetchJSON('/api/token-status').then(data => {
+        if (data) {
+            const dot = document.getElementById('token-status-dot');
+            const text = document.getElementById('token-status-text');
+            dot.className = `w-2 h-2 rounded-full ${data.valid ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`;
+            text.textContent = data.valid ? 'Active' : data.message;
+        }
+    });
+
+    fetchJSON('/api/bot-status').then(data => {
+        if (data) {
+            const badge = document.getElementById('bot-status-badge');
+            const sessionBadge = document.getElementById('session-badge');
+            const sessionStatus = document.getElementById('session-status');
+            badge.textContent = data.running ? 'OPERATIONAL' : 'STOPPED';
+            badge.className = data.running
+                ? 'bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full label-text font-bold'
+                : 'bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded-full label-text font-bold';
+            sessionBadge.textContent = data.running ? 'ACTIVE' : 'STOPPED';
+            sessionBadge.className = data.running
+                ? 'bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded-full label-text font-bold'
+                : 'bg-red-100 text-red-700 text-[10px] px-2 py-1 rounded-full label-text font-bold';
+            sessionStatus.textContent = data.running ? 'Running' : 'Stopped';
+        }
+    });
+
+    fetchJSON('/api/account-balance').then(data => {
+        if (data) {
+            document.getElementById('total-collateral').textContent = data.total_collateral
+                ? '\u20B9' + Number(data.total_collateral).toLocaleString('en-IN', {minimumFractionDigits: 2})
+                : '---';
+            document.getElementById('available-balance').textContent = data.available_balance
+                ? '\u20B9' + Number(data.available_balance).toLocaleString('en-IN', {minimumFractionDigits: 2})
+                : '---';
+        }
+    });
+
+    fetchJSON('/api/pnl/daily').then(data => {
+        if (data) {
+            document.getElementById('daily-pnl').textContent = data.pnl >= 0
+                ? '+\u20B9' + Number(data.pnl).toLocaleString('en-IN', {minimumFractionDigits: 2})
+                : '-\u20B9' + Math.abs(data.pnl).toLocaleString('en-IN', {minimumFractionDigits: 2});
+            document.getElementById('daily-pnl').className = `serif-text text-lg font-bold ${data.pnl >= 0 ? 'text-green-600' : 'text-error'}`;
+            const pct = data.total > 0 ? ((data.wins / data.total) * 100).toFixed(1) : '--';
+            document.getElementById('daily-pnl-pct').textContent = pct !== '--' ? `+${pct}%` : '--';
+        }
+    });
+
+    fetchJSON('/api/pnl/total').then(data => {
+        if (data) {
+            document.getElementById('win-rate').textContent = data.win_rate ? data.win_rate + '%' : '--';
+            document.getElementById('total-trades').textContent = data.total || '--';
+        }
+    });
+
+    fetchJSON('/api/pending-signals').then(data => {
+        const container = document.getElementById('pending-signals');
+        if (data && data.length > 0) {
+            container.innerHTML = data.map(s => `
+                <div class="group flex items-center gap-4 py-4 border-b border-surface-variant/30">
+                    <div class="w-10 h-10 flex-shrink-0 rounded-full bg-surface-container-high flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">candlestick_chart</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="serif-text font-bold text-base">${s.symbol}</h3>
+                            <span class="label-text text-[10px] font-bold text-primary">${s.side}</span>
+                        </div>
+                        <p class="label-text text-[11px] text-on-surface-variant">Trigger: ${s.trigger_price} | SL: ${s.sl_price} | TP: ${s.tp_price}</p>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            container.innerHTML = '<div class="py-8 text-center text-on-surface-variant label-text text-sm">No pending signals</div>';
+        }
+    });
+
+    fetchJSON('/api/logs').then(data => {
+        const container = document.getElementById('trade-logs');
+        if (data && data.length > 0) {
+            container.innerHTML = data.map(log => {
+                const iconMap = {
+                    'SIGNAL_RECEIVED': ['radio_button_checked', 'text-blue-600', 'bg-blue-50'],
+                    'ENTRY_EXECUTED': ['check_circle', 'text-green-600', 'bg-green-50'],
+                    'EXIT_EXECUTED': ['logout', 'text-amber-600', 'bg-amber-50'],
+                    'TRADE_CANCELLED': ['cancel', 'text-red-600', 'bg-red-50'],
+                    'BOT_STARTED': ['play_circle', 'text-blue-600', 'bg-blue-50'],
+                    'BOT_STOPPED': ['pause_circle', 'text-slate-600', 'bg-slate-50'],
+                    'ERROR': ['error', 'text-red-600', 'bg-red-50'],
+                };
+                const [icon, color, bg] = iconMap[log.event_type] || ['circle', 'text-slate-500', 'bg-slate-50'];
+                return `
+                    <div class="py-3 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full ${bg} flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined ${color} text-lg">${icon}</span>
+                        </div>
+                        <div class="flex-grow">
+                            <p class="serif-text text-sm font-semibold text-on-surface">${log.message}</p>
+                            <p class="label-text text-[10px] text-on-surface-variant">${log.timestamp || ''}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            container.innerHTML = '<div class="py-8 text-center text-on-surface-variant label-text text-sm">No logs yet</div>';
+        }
+    });
+}
+
+document.getElementById('btn-start-bot').addEventListener('click', async () => {
+    const resp = await fetchJSON('/api/start-bot');
+    if (resp && resp.status === 'ok') updateStatus();
+});
+
+document.getElementById('btn-stop-bot').addEventListener('click', async () => {
+    const resp = await fetchJSON('/api/stop-bot');
+    if (resp && resp.status === 'ok') updateStatus();
+});
+
+document.getElementById('fab-refresh').addEventListener('click', updateStatus);
+
+updateStatus();
+setInterval(updateStatus, 5000);
+</script>
+</body>
+</html>

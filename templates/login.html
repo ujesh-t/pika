@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Alexandria | Login{% endblock %}
+{% block content %}
+<main class="max-w-md mx-auto px-6 pt-8 pb-32">
+<section class="mb-10 text-center">
+<div class="inline-block p-4 bg-surface-container-low rounded-full mb-4">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<h2 class="font-headline text-3xl font-bold text-on-surface mb-2 tracking-tight">Coders Trading Bot</h2>
+<p class="font-label text-sm text-on-surface-variant uppercase tracking-widest">Authentication Required</p>
+</section>
+
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-sm">
+<form method="POST" action="/login" class="space-y-6">
+<div class="space-y-2">
+<label class="label-text text-[11px] uppercase tracking-widest text-on-surface-variant font-bold">Username</label>
+<input type="text" name="username" required
+class="w-full px-4 py-3 rounded-lg bg-white border border-outline-variant/50 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body text-sm"
+placeholder="Enter username">
+</div>
+<div class="space-y-2">
+<label class="label-text text-[11px] uppercase tracking-widest text-on-surface-variant font-bold">Password</label>
+<input type="password" name="password" required
+class="w-full px-4 py-3 rounded-lg bg-white border border-outline-variant/50 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body text-sm"
+placeholder="Enter password">
+</div>
+{% if error %}
+<p class="text-error text-sm label-text mt-2">{{ error }}</p>
+{% endif %}
+<button type="submit"
+class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-4 rounded-xl font-headline font-bold text-lg shadow-lg active:scale-95 duration-200 transition-all hover:brightness-110">
+Sign In
+</button>
+</form>
+</div>
+
+<p class="text-center font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-8 px-4">
+Secure access to automated trading terminal
+</p>
+</main>
+{% endblock %}
